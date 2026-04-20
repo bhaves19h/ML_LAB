@@ -1,0 +1,111 @@
+Instead of one hypothesis, this algorithm keeps a set of all possible hypotheses that are consistent with the training data.
+
+It maintains two boundaries:
+
+S (Specific boundary) → most specific hypotheses
+G (General boundary) → most general hypotheses
+
+👉 Final solution lies between S and G
+
+⚙️ Steps of Implementation
+1. Initialize
+
+S = most specific hypothesis
+
+S = {⟨Ø, Ø, Ø, …⟩}
+
+G = most general hypothesis
+
+G = {⟨?, ?, ?, …⟩}
+2. For each training example:
+✅ Case 1: Positive Example (Yes)
+
+👉 Update S:
+
+Remove hypotheses in S that don’t match the example
+Generalize S minimally:
+If value differs → replace with ?
+
+👉 Update G:
+
+Remove hypotheses inconsistent with the example
+❌ Case 2: Negative Example (No)
+
+👉 Update G:
+
+Remove hypotheses that incorrectly classify example as positive
+Specialize G minimally:
+Replace ? with specific values that exclude the negative example
+
+👉 Update S:
+
+Remove hypotheses inconsistent with G
+📊 Example
+Sky	Temp	Humidity	Wind	Water	Forecast	Output
+Sunny	Warm	Normal	Strong	Warm	Same	Yes
+Sunny	Warm	High	Strong	Warm	Same	Yes
+Rainy	Cold	High	Strong	Warm	Change	No
+🔍 Step-by-Step Execution
+Step 1: Initialize
+S = {⟨Ø, Ø, Ø, Ø, Ø, Ø⟩}
+G = {⟨?, ?, ?, ?, ?, ?⟩}
+Step 2: First Positive Example
+S = {⟨Sunny, Warm, Normal, Strong, Warm, Same⟩}
+G = {⟨?, ?, ?, ?, ?, ?⟩}
+Step 3: Second Positive Example
+Humidity differs → generalize
+S = {⟨Sunny, Warm, ?, Strong, Warm, Same⟩}
+G = {⟨?, ?, ?, ?, ?, ?⟩}
+Step 4: Negative Example
+
+Now we specialize G
+
+G becomes:
+{⟨Sunny, ?, ?, ?, ?, ?⟩,
+ ⟨?, Warm, ?, ?, ?, ?⟩,
+ ⟨?, ?, ?, ?, ?, Same⟩}
+
+Remove inconsistent ones → final:
+
+G = {⟨Sunny, ?, ?, ?, ?, ?⟩}
+✅ Final Boundaries
+S = {⟨Sunny, Warm, ?, Strong, Warm, Same⟩}
+G = {⟨Sunny, ?, ?, ?, ?, ?⟩}
+💻 Simple Python Code (Basic Understanding)
+def candidate_elimination(data):
+    S = ['0'] * (len(data[0]) - 1)
+    G = [['?'] * (len(data[0]) - 1)]
+
+    for example in data:
+        if example[-1] == "Yes":
+            for i in range(len(S)):
+                if S[i] == '0':
+                    S[i] = example[i]
+                elif S[i] != example[i]:
+                    S[i] = '?'
+
+            G = [g for g in G if all(g[i] == '?' or g[i] == example[i] for i in range(len(S)))]
+
+        else:
+            new_G = []
+            for g in G:
+                for i in range(len(g)):
+                    if g[i] == '?':
+                        if S[i] != example[i]:
+                            new_h = g.copy()
+                            new_h[i] = S[i]
+                            new_G.append(new_h)
+            G = new_G
+
+    return S, G
+
+
+data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No']
+]
+
+S, G = candidate_elimination(data)
+print("S:", S)
+print("G:", G)
