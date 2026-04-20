@@ -1,0 +1,110 @@
+Backpropagation is used to train a neural network by:
+
+Calculating the error (loss)
+Sending that error backwards
+Updating weights to reduce error
+
+👉 In simple terms:
+“Forward → check error → go backward → fix weights”
+
+⚙️ Working Overview
+🔁 2 Main Phases:
+Forward Propagation
+Input → Hidden layers → Output
+Compute prediction
+Backward Propagation
+Compare prediction with actual output
+Compute error
+Update weights using gradients
+📐 Core Formulas
+1. Output of neuron
+
+y=f(∑w
+i
+	​
+
+x
+i
+	​
+
++b)
+
+2. Error (Loss function – example MSE)
+
+E=
+2
+1
+	​
+
+(target−output)
+2
+
+3. Weight Update Rule (Gradient Descent)
+
+w
+new
+	​
+
+=w
+old
+	​
+
+−η
+∂w
+∂E
+	​
+
+
+η (eta) = learning rate
+🔄 Step-by-Step Algorithm
+Step 1: Initialize weights randomly
+Step 2: Forward pass
+Calculate output from input
+Step 3: Compute error
+Compare predicted vs actual
+Step 4: Backward pass
+Calculate gradients using chain rule
+Step 5: Update weights
+Adjust weights to reduce error
+Step 6: Repeat
+Until error is minimized
+🔍 Simple Example Flow
+Input → Hidden Layer → Output
+         ↓
+     Error computed
+         ↓
+ Backward update weights
+💻 Simple Python Code (Basic Understanding)
+import numpy as np
+
+# Sigmoid activation
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+# Derivative
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+# Input and output
+X = np.array([[0,0],[0,1],[1,0],[1,1]])
+y = np.array([[0],[1],[1],[0]])
+
+# Initialize weights
+np.random.seed(1)
+weights = np.random.rand(2,1)
+
+# Training
+for epoch in range(10000):
+    # Forward
+    output = sigmoid(np.dot(X, weights))
+    
+    # Error
+    error = y - output
+    
+    # Backprop
+    adjustments = error * sigmoid_derivative(output)
+    
+    # Update
+    weights += np.dot(X.T, adjustments)
+
+print("Trained weights:\n", weights)
