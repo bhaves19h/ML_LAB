@@ -1,0 +1,107 @@
+A Bayesian classifier predicts the class of a data point using probability.
+
+👉 It is based on Bayes’ Theorem
+
+📐 Bayes’ Theorem
+P(C∣X)=
+P(X)
+P(X∣C)⋅P(C)
+	​
+
+P(A)
+P(B∣A)
+P(B∣¬A)
+P(A∣B)=
+P(B)
+P(B∣A)P(A)
+	​
+
+≈0.68,P(B)≈0.25
+P(B)=0.25
+P(B|A)P(A)=0.17
+P(A|B)~0.68
+Posterior = useful evidence / total evidence
+Where:
+P(C|X) → Posterior (probability of class given data)
+P(X|C) → Likelihood
+P(C) → Prior probability
+P(X) → Evidence
+
+👉 Goal: Find class C with highest probability
+
+⚙️ How Bayesian Classifier Works
+Calculate prior probability of each class
+Calculate likelihood for each feature
+Apply Bayes’ formula
+Choose class with maximum posterior probability
+🚀 Types of Bayesian Classifiers
+1. Naive Bayes Classifier
+📌 Idea
+
+Assumes all features are independent (naive assumption)
+
+P(X∣C)=P(x
+1
+	​
+
+∣C)⋅P(x
+2
+	​
+
+∣C)⋅...⋅P(x
+n
+	​
+
+∣C)
+
+👉 Final formula:
+
+P(C∣X)∝P(C)∏P(x
+i
+	​
+
+∣C)
+2. Gaussian Naive Bayes
+Used for continuous data
+Assumes data follows normal distribution
+3. Multinomial Naive Bayes
+Used for text classification
+Example: spam detection 📧
+4. Bernoulli Naive Bayes
+Works with binary features (0/1)
+📊 Example (Simple)
+
+Suppose:
+
+Class = Spam / Not Spam
+Word = “Free”
+Given:
+P(Spam) = 0.6
+P(Free | Spam) = 0.8
+P(Free | Not Spam) = 0.1
+
+👉 Prediction:
+
+Spam probability > Not Spam → classify as Spam
+💻 Python Code (Naive Bayes using sklearn)
+from sklearn.naive_bayes import GaussianNB
+
+# Sample data
+X = [[1, 20], [2, 21], [3, 22], [10, 30]]
+y = [0, 0, 0, 1]
+
+model = GaussianNB()
+model.fit(X, y)
+
+# Prediction
+print(model.predict([[2, 21]]))
+⚠️ Advantages
+
+✅ Simple and fast
+✅ Works well with large datasets
+✅ Good for text classification
+
+❌ Disadvantages
+
+❌ Assumes feature independence (not always true)
+❌ Performance drops if features are correlated
