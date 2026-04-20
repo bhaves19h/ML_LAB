@@ -1,0 +1,62 @@
+The Find-S algorithm finds the most specific hypothesis that fits all positive training examples.
+
+Uses only positive (Yes) examples
+Ignores negative examples
+Produces a single hypothesis
+⚙️ Steps of Implementation
+
+Initialize hypothesis (h)
+Start with the most specific hypothesis:
+
+h = [Ø, Ø, Ø, ..., Ø]
+Go through each training example
+If the example is Positive (Yes):
+For each attribute:
+If h[i] is Ø → replace it with the attribute value
+If h[i] ≠ value → replace it with ? (generalize)
+If the example is Negative (No):
+Ignore it
+Return final hypothesis
+📊 Example Dataset
+Sky	Temp	Humidity	Wind	Water	Forecast	Output
+Sunny	Warm	Normal	Strong	Warm	Same	Yes
+Sunny	Warm	High	Strong	Warm	Same	Yes
+Rainy	Cold	High	Strong	Warm	Change	No
+🔍 Step-by-Step Execution
+Step 1: Initialize
+h = [Ø, Ø, Ø, Ø, Ø, Ø]
+Step 2: First Positive Example
+h = [Sunny, Warm, Normal, Strong, Warm, Same]
+Step 3: Second Positive Example
+“Humidity” changes → generalize to ?
+h = [Sunny, Warm, ?, Strong, Warm, Same]
+Step 4: Negative Example
+Ignore it
+✅ Final Hypothesis
+h = [Sunny, Warm, ?, Strong, Warm, Same]
+💻 Python Code
+def find_s(training_data):
+    # Initialize hypothesis
+    h = ['0'] * (len(training_data[0]) - 1)
+
+    for example in training_data:
+        if example[-1] == "Yes":  # Positive example
+            for i in range(len(h)):
+                if h[i] == '0':
+                    h[i] = example[i]
+                elif h[i] != example[i]:
+                    h[i] = '?'
+    return h
+
+
+# Dataset
+data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No']
+]
+
+result = find_s(data)
+print("Final Hypothesis:", result)
+🧾 Output
+Final Hypothesis: ['Sunny', 'Warm', '?', 'Strong', 'Warm', 'Same']
